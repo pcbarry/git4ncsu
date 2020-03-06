@@ -86,6 +86,6 @@ if __name__=='__main__':
   conf['Q20'] = 1.0
   conf['aux']=AUX()
   eweak=EWEAK()
-  print eweak.get_alpha(10.0)
+  print(eweak.get_alpha(10.0))
 
 

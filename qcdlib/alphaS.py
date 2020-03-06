@@ -175,16 +175,16 @@ if __name__=='__main__':
   mZ2=conf['aux'].mZ2
 
 
-  print '========================'
-  print 'test alphaS evolution'
-  print '========================'
-  print 'Q2=1           alphaS=%0.5f'%aS.get_alphaS(1.0)
-  print 'Q2=(1+mc2)/2   alphaS=%0.5f'%aS.get_alphaS(0.5*(1.0+mc2))
-  print 'Q2=mc2         alphaS=%0.5f'%aS.get_alphaS(mc2)
-  print 'Q2=(mc2+mb2)/2 alphaS=%0.5f'%aS.get_alphaS(0.5*(mc2+mb2))
-  print 'Q2=mb2         alphaS=%0.5f'%aS.get_alphaS(mb2)
-  print 'Q2=(mb2+mZ2)/2 alphaS=%0.5f'%aS.get_alphaS(0.5*(mb2+mZ2))
-  print 'Q2=mZ2         alphaS=%0.5f'%aS.get_alphaS(mZ2)
+  print('========================')
+  print('test alphaS evolution')
+  print('========================')
+  print('Q2=1           alphaS=%0.5f'%aS.get_alphaS(1.0))
+  print('Q2=(1+mc2)/2   alphaS=%0.5f'%aS.get_alphaS(0.5*(1.0+mc2)))
+  print('Q2=mc2         alphaS=%0.5f'%aS.get_alphaS(mc2))
+  print('Q2=(mc2+mb2)/2 alphaS=%0.5f'%aS.get_alphaS(0.5*(mc2+mb2)))
+  print('Q2=mb2         alphaS=%0.5f'%aS.get_alphaS(mb2))
+  print('Q2=(mb2+mZ2)/2 alphaS=%0.5f'%aS.get_alphaS(0.5*(mb2+mZ2)))
+  print('Q2=mZ2         alphaS=%0.5f'%aS.get_alphaS(mZ2))
   
 
 

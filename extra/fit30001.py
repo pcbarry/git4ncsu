@@ -19,7 +19,7 @@ from sklearn.model_selection import train_test_split
 import os
 import pylab as py
 
-from tools.tools import checkdir,load,save
+from tools.tools import checkdir
 from qcdlib import mellin
 
 def get_data(k,channel,flavor,path2nptabs,original=False):

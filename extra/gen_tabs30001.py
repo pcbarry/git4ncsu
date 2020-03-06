@@ -2,28 +2,26 @@
 import os,sys
 import numpy as np
 
-import lhapdf
+#import lhapdf
 
 #--from tools
-from tools.tools import load,save,checkdir
+from tools.tools import checkdir
 from tools.config import load_config,conf
 #--from qcdlib
 from qcdlib import mellin,aux,alphaS,eweak
 #-- from dy
-import obslib.dy.piontheory
-import obslib.dy.reader
-import obslib.dy.fakepdf as fakepdf
+from dy import theory,reader,fakepdf
 
 def gen_melltab():
     conf['path2dytab-hybrid']='melltabs/'
 
-    conf['dy-pion']=obslib.dy.piontheory.DY_PION()
+    conf['dy-pion']=theory.DY_PION()
     conf['dy-pion'].mellin=conf['mellin']
     conf['dy-pion'].gen_melltab_hybrid()
 
 def save_as_np(channel,flavor,path2melltabs,path2nptabs):
 
-    print 'saving %s, %s as nptabs'%(channel,flavor)
+    print('saving %s, %s as nptabs'%(channel,flavor))
 
     datasets=[30001]
     melltabs={}
@@ -33,8 +31,9 @@ def save_as_np(channel,flavor,path2melltabs,path2nptabs):
         filenames=os.listdir('%s/%s'%(path2melltabs,k))
         idx[k]=[]
         for f in filenames:
+            if f[0]=='.': continue
             idx[k].append(int(f.split('.')[0]))
-            melltabs[k][idx[k][-1]]=load('%s/%s/%s'%(path2melltabs,k,f))
+            melltabs[k][idx[k][-1]]=np.load('%s/%s/%s'%(path2melltabs,k,f),allow_pickle=True)[()]
 
     mellinN=conf['mellin'].N
     realN=mellinN.real
@@ -109,12 +108,12 @@ if __name__=='__main__':
     conf['eweak']=eweak.EWEAK()
     conf['order']='NLO'
     conf['alphaS']=alphaS.ALPHAS()
-    conf['mellin']=mellin.MELLIN()
+    conf['mellin']=mellin.MELLIN(npts=4)
     conf['pdfB']=fakepdf.FAKEPDF()
 
-    conf['dy-pion tabs']=obslib.dy.reader.READER_PIONS().load_data_sets('dy-pion')
+    conf['dy-pion tabs']=reader.READER().load_data_sets('dy-pion')
 
-    gen_melltab() #--only turn on to change the mellin tabs; already calculated
+    #gen_melltab() #--only turn on to change the mellin tabs; already calculated
 
     path2melltabs='melltabs/'
     path2nptabs  ='nptabs/'

@@ -16,7 +16,7 @@ import lhapdf
 
 #--from tools
 from tools.config import conf
-from tools.tools import save,load,checkdir
+from tools.tools import checkdir
 
 #--from qcdlib
 from qcdlib import aux,eweak,mellin,alphaS,pdfpion1
@@ -280,23 +280,23 @@ if __name__=='__main__':
 
                 if k==10001: plot_E615(conf['dy-pion tabs'][k],xspacedat,mellspacedat,nnspacedat,k,part,f)
                 else: plot_NA10(conf['dy-pion tabs'][k],xspacedat,mellspacedat,nnspacedat,k,part,f)
-                #for i in range(len(conf['dy-pion tabs'][k]['idx'])):
-                #    print('\nplotting the integrands')
-                #    mellinxsec=load('%s/dy/data/%s/%s/%s/%smell.dat'%(os.environ['ML4JAM'],k,part,f,i))
-                #    nnxsec=load('%s/dy/data/%s/%s/%s/%snn.dat'%(os.environ['ML4JAM'],k,part,f,i))
+                for i in range(len(conf['dy-pion tabs'][k]['idx'])):
+                    print('\nplotting the integrands')
+                    mellinxsec=load('%s/dy/data/%s/%s/%s/%smell.dat'%(os.environ['ML4JAM'],k,part,f,i))
+                    nnxsec=load('%s/dy/data/%s/%s/%s/%snn.dat'%(os.environ['ML4JAM'],k,part,f,i))
 
-                #    plot_mellin(mellinxsec,nnxsec,k,part,f,i)
-        #part='full'
-        #xspacedat=get_xspace(k,part)
-        #mellspacedat=get_mellspace(k,part)
-        #nnspacedat=get_nnspace(k,part)
+                    plot_mellin(mellinxsec,nnxsec,k,part,f,i)
+        part='full'
+        xspacedat=get_xspace(k,part)
+        mellspacedat=get_mellspace(k,part)
+        nnspacedat=get_nnspace(k,part)
 
-        #if k==10001: plot_E615(conf['dy-pion tabs'][k],xspacedat,mellspacedat,nnspacedat,k,part,None)
-        #else: plot_NA10(conf['dy-pion tabs'][k],xspacedat,mellspacedat,nnspacedat,k,part,None)
+        if k==10001: plot_E615(conf['dy-pion tabs'][k],xspacedat,mellspacedat,nnspacedat,k,part,None)
+        else: plot_NA10(conf['dy-pion tabs'][k],xspacedat,mellspacedat,nnspacedat,k,part,None)
 
-        #for i in range(len(conf['dy-pion tabs'][k]['idx'])):
-        #    print('\nplotting the integrands')
-        #    mellinub=load('%s/dy/data/%s/%s/%sxsecmell.dat'%(os.environ['ML4JAM'],k,part,i))
-        #    nnub=load('%s/dy/data/%s/%s/%sxsecnn.dat'%(os.environ['ML4JAM'],k,part,i))
+        for i in range(len(conf['dy-pion tabs'][k]['idx'])):
+            print('\nplotting the integrands')
+            mellinub=load('%s/dy/data/%s/%s/%sxsecmell.dat'%(os.environ['ML4JAM'],k,part,i))
+            nnub=load('%s/dy/data/%s/%s/%sxsecnn.dat'%(os.environ['ML4JAM'],k,part,i))
 
-        #    plot_mellin(mellinub,nnub,k,part,None,i)
+            plot_mellin(mellinub,nnub,k,part,None,i)

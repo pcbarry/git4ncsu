@@ -1,8 +1,8 @@
 import sys,os
 import numpy as np
 import pandas as pd
-from tools import isnumeric,lprint
-from config import conf
+from tools.tools import isnumeric,lprint
+from tools.config import conf
 
 class _READER:
 
@@ -18,7 +18,7 @@ class _READER:
       XLSX=conf['datasets'][reaction]['xlsx']
       TAB={}
       for k in XLSX: 
-          if verb: print 'loading %s data sets %d'%(reaction,k)
+          if verb: print('loading %s data sets %d'%(reaction,k))
           fname=conf['datasets'][reaction]['xlsx'][k]
           if  fname.startswith('./'):
               tab=pd.read_excel(fname)

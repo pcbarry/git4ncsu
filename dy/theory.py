@@ -2,7 +2,7 @@
 from scipy.integrate import fixed_quad
 from scipy.special import gamma
 import numpy as np
-from tools.tools import load, save, checkdir
+from tools.tools import checkdir
 from tools.config import conf
 from sklearn.preprocessing import MinMaxScaler
 
@@ -113,7 +113,6 @@ class DY_PION:
    return out 
 
   def _get_lum_flav(self,fA,fB,flav): 
-
     if   flav=='g' : return fA*fB[0]
     elif flav=='u' : return fA*fB[1]
     elif flav=='ub': return fA*fB[2]
@@ -126,7 +125,7 @@ class DY_PION:
     elif flav=='b' : return fA*fB[9]
     elif flav=='bb': return fA*fB[10]
 
-  def get_lum(self,z,y,channel): 
+  def get_lum(self,z,y,channel):
     x1=self.get_x1(z,y)
     x2=self.get_x2(z,y)
     if x1>1 or x2>1: return 0  
@@ -156,7 +155,7 @@ class DY_PION:
       fB=conf['pdfB'].get_pdfs(x2,self.muF2)
       return self._get_lum_flav(fA,fB,self.flav)
 
-    if self.ilum=='flavors':
+    elif self.ilum=='flavors':
       fA=conf['pdfA'].get_pdfs(x1,self.muF2)
       fB=conf['pdfB'].get_pdfs(x2,self.muF2)
       return self.get_flavors(fA,fB,channel)
@@ -482,8 +481,8 @@ class DY_PION:
     for i in range(pts): 
       self.n=N[i]
       self.flav=flav
-      real=self.get_xsec(Q2,S,Y,muF2,ilum='hybrid-real',part=part)
-      imag=self.get_xsec(Q2,S,Y,muF2,ilum='hybrid-imag',part=part)
+      real=self.get_xsec(Q2,S,Y,muF2,ilum='hybrid-real',part=part,flav=flav)
+      imag=self.get_xsec(Q2,S,Y,muF2,ilum='hybrid-imag',part=part,flav=flav)
       SIGN[i]=np.complex(real,imag)
     return SIGN
 
@@ -515,7 +514,7 @@ class DY_PION:
       path2dytabK='%s/%d'%(path2dytab,k)
       checkdir(path2dytabK)
       for i in range(len(conf['dy-pion tabs'][k]['idx'])):
-        print '%s: %i/%i'%(k,i,len(conf['dy-pion tabs'][k]['idx']))
+        print('%s: %i/%i'%(k,i,len(conf['dy-pion tabs'][k]['idx'])))
         idx=conf['dy-pion tabs'][k]['idx'][i]
         S  = conf['dy-pion tabs'][k]['S'][i]
         Y  = conf['dy-pion tabs'][k]['Y'][i]
@@ -523,7 +522,7 @@ class DY_PION:
         muF2=Q2
         data=self._gen_melltab_hybrid(Q2,S,Y,muF2)
         fname='%s/%d.melltab'%(path2dytabK,idx)
-        save(data,fname)
+        np.save(fname,data)
 
   def load_melltab_hybrid(self):
     self.melltab={}
@@ -532,8 +531,8 @@ class DY_PION:
       path2dytabK='%s/%d'%(path2dytab,k)
       self.melltab[k]={}
       for idx in conf['dy-pion tabs'][k]['idx']:
-        fname='%s/%d.melltab'%(path2dytabK,idx)
-        self.melltab[k][idx]=load(fname)
+        fname='%s/%d.melltab.npy'%(path2dytabK,idx)
+        self.melltab[k][idx]=np.load(fname,allow_pickle=True)[()]
 
   def load_nn_hybrid(self):
     self.nn={}
@@ -548,8 +547,8 @@ class DY_PION:
       if part=='qA,gB': flavs=['g']
       if part=='gA,qB': flavs=['u','d','s','c','b','ub','db','sb','cb','bb']
       for f in flavs:
-          fname='%s/30001/%s/%s.json'%(path2nntab,part,f) #--the 30001 is for a specific dataset!
-          nn=load(fname)
+          fname='%s/30001/%s/%s.npy'%(path2nntab,part,f) #--the 30001 is for a specific dataset!
+          nn=np.load(fname,allow_pickle=True)[()]
           self.nn[part][f]={}
           self.nn[part][f]['predict']=nn['model'].predict
           if initx:
@@ -609,7 +608,7 @@ class DY_PION:
     if part!='full': 
         xsec=mult*data[part][flav]
         checkdir('%s/data/%s/%s/%s'%(conf['path2ml4jam'],k,part,flav))
-        save(data[part][flav],'%s/data/%s/%s/%s/%smell.dat'%(conf['path2ml4jam'],k,part,flav,i))
+        np.save('%s/data/%s/%s/%s/%smell'%(conf['path2ml4jam'],k,part,flav,i),data[part][flav],allow_pickle=True)
 
     elif part=='full':
         xsec = self.eU2*PDFA['u']  * data['qA,qbB']['ub']\
@@ -647,7 +646,7 @@ class DY_PION:
                 +self.eD2*PDFA['g']  * data['gA,qB']['b']\
                 +self.eD2*PDFA['g']  * data['gA,qB']['bb']
         checkdir('%s/data/%s/%s'%(conf['path2ml4jam'],k,part))
-        save(xsec,'%s/data/%s/%s/%sxsecmell.dat'%(conf['path2ml4jam'],k,part,i))
+        np.save('%s/data/%s/%s/%sxsecmell'%(conf['path2ml4jam'],k,part,i),xsec,allow_pickle=True)
 
     return self.mellin_ext.invert(1,xsec) # x=1 because x**-N is inside data[..][..]
 
@@ -671,7 +670,7 @@ class DY_PION:
         result=self.yscaler[part][flav].inverse_transform(result).T
         data[part][flav]=result[0]+1j*result[1]
         checkdir('%s/data/%s/%s/%s'%(conf['path2ml4jam'],k,part,flav))
-        save(data[part][flav],'%s/data/%s/%s/%s/%snn.dat'%(conf['path2ml4jam'],k,part,flav,i))
+        np.save('%s/data/%s/%s/%s/%snn'%(conf['path2ml4jam'],k,part,flav,i),data[part][flav],allow_pickle=True)
 
     """
     Put in the moments for pdfA (the pion)
@@ -760,7 +759,7 @@ class DY_PION:
                 +self.eD2*PDFA['g']  * data['gA,qB']['b']\
                 +self.eD2*PDFA['g']  * data['gA,qB']['bb']
         checkdir('%s/data/%s/%s'%(conf['path2ml4jam'],k,part))
-        save(xsec,'%s/data/%s/%s/%sxsecnn.dat'%(conf['path2ml4jam'],k,part,i))
+        np.save('%s/data/%s/%s/%sxsecnn'%(conf['path2ml4jam'],k,part,i),xsec,allow_pickle=True)
 
     return self.mellin_ext.invert(1,xsec) # x=1 because x**-N is inside data[..][..]
 
@@ -830,11 +829,11 @@ if __name__=='__main__':
       muF2=Q2
       exact =  dy.get_xsec(Q2,S,Y,muF2,ilum='normal',part='full')
       rel_err=abs((approx-exact)/exact)*100
-      print rel_err
+      print(rel_err)
 
 
   t2=time.time()
-  print t2-t1
+  print(t2-t1)
 
 
 

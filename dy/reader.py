@@ -80,8 +80,9 @@ if __name__ == "__main__":
     conf['datasets']={}
     conf['datasets']['dy']={}
     conf['datasets']['dy']['xlsx']={}
-    conf['datasets']['dy']['xlsx'][10001]='dy/expdata/10001.xlsx'
-    conf['datasets']['dy']['xlsx'][10002]='dy/expdata/10002.xlsx'
+    #conf['datasets']['dy']['xlsx'][10001]='dy/expdata/10001.xlsx'
+    #conf['datasets']['dy']['xlsx'][10002]='dy/expdata/10002.xlsx'
+    conf['datasets']['dy']['xlsx'][30001]='30001.xlsx'
     conf['datasets']['dy']['norm']={}
     conf['datasets']['dy']['filters']=[]
     conf['datasets']['dy']['filters'].append("Q2>1") 

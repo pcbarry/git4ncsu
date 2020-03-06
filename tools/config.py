@@ -9,7 +9,7 @@ def load_config(fname):
     D = {}
     for l in L:
         try:
-            exec l in D#l.replace('<<','').replace('>>','') in D
+            exec(l in D)#l.replace('<<','').replace('>>','') in D
         except:
             print('ERR at the input.py. Look for %s'%l)
             sys.exit()   

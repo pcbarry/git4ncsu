@@ -88,7 +88,7 @@ if __name__=='__main__':
   X=10**np.linspace(-5,-1,10)
   f=lambda x: x**a*(1-x)**b
   for x in X:
-    print 'x=%10.4e  f=%10.4e  inv=%10.4e'%(x,f(x),mell.invert(x,mom))
+    print('x=%10.4e  f=%10.4e  inv=%10.4e'%(x,f(x),mell.invert(x,mom)))
 
 
 
